@@ -38,8 +38,8 @@ func PortScanner() (int, int) {
 //TODO 3 : ADD closed ports; currently code only tracks open ports
 var openports []int  // notice the capitalization here. access limited!
 var closeports []int
-
-	ports := make(chan int, 500)   // TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
+// TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
+	ports := make(chan int, 300)    // found that 1024 (80.114s) is faster than 500 (240.252s) 700 (160.181s) 300(320.257s)
 	results := make(chan int)
 
 	for i := 0; i < cap(ports); i++ {
@@ -67,13 +67,15 @@ var closeports []int
 	sort.Ints(closeports) // sorts the closeports by port number
 
 	//TODO 5 : Enhance the output for easier consumption, include closed ports
-
-	for _, port := range openports {
-		fmt.Printf("%d, open\n", port)
-	}
+	//moving openports to below closeports allows you to see it
+	//CLosedports has too many prints that you cannot scroll up enough so moving it to the bottom allows you to see it
 	for _, port := range closeports {
 		fmt.Printf("%d, close\n", port)
 	}
+	for _, port := range openports {
+		fmt.Printf("%d, open\n", port)
+	}
+	
 
 	return len(openports), len(closeports) // TODO 6 : Return total number of ports scanned (number open, number closed); 
 	//you'll have to modify the function parameter list in the defintion and the values in the scanner_test
