@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"net"
 	"sort"
-	"time"
+	"time" //need time for DialTimeout
 )
 
 
@@ -19,7 +19,7 @@ import (
 func worker(ports, results chan int) {
 	for p := range ports {
 		address := fmt.Sprintf("scanme.nmap.org:%d", p)    
-		conn, err := net.DialTimeout("tcp", address, 20 * time.Second) // TODO 2 : REPLACE THIS WITH DialTimeout (before testing!)
+		conn, err := net.DialTimeout("tcp", address, 40 * time.Second) // TODO 2 : REPLACE THIS WITH DialTimeout (before testing!)
 		if err != nil { 
 			results <- -1 * p //make a negative port number that will go through the channel
 			continue
@@ -39,7 +39,7 @@ func PortScanner() (int, int) {
 var openports []int  // notice the capitalization here. access limited!
 var closeports []int
 
-	ports := make(chan int, 100)   // TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
+	ports := make(chan int, 500)   // TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
 	results := make(chan int)
 
 	for i := 0; i < cap(ports); i++ {
@@ -64,6 +64,7 @@ var closeports []int
 	close(ports)
 	close(results)
 	sort.Ints(openports)
+	sort.Ints(closeports) // sorts the closeports by port number
 
 	//TODO 5 : Enhance the output for easier consumption, include closed ports
 
