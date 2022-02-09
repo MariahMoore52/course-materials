@@ -76,7 +76,7 @@ var closeports []int
 		fmt.Printf("%d, open\n", port)
 	}
 	
-
+	//needed to change return to 2 ints
 	return len(openports), len(closeports) // TODO 6 : Return total number of ports scanned (number open, number closed); 
 	//you'll have to modify the function parameter list in the defintion and the values in the scanner_test
 }

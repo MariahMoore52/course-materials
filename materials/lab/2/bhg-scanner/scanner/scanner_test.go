@@ -9,7 +9,7 @@ func TestOpenPort(t *testing.T){
 
     gotopen, _ := PortScanner() // Currently function returns only number of open ports
     want := 1 // default value when passing in 1024 TO scanme; also only works because currently PortScanner only returns 
-	          //consider what would happen if you parameterize the portscanner address and ports to scan
+	          //consider what would happen if you parameterize the portscanner address and ports to scan  
 				//changed the want to 1 so the test passes
     if gotopen != want {
         t.Errorf("got %d, wanted %d", gotopen, want)
