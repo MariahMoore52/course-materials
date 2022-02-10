@@ -3,6 +3,11 @@
 // License: {$RepoRoot}/materials/BHG-LICENSE
 // Useage:
 // {TODO 1: FILL IN}
+//For useage you need to have a value put in the tester or main file that specifies the port numer. 
+//The first thing that was changed was changing to time to DialTimeout. With this we needed to import time.
+//Then a slice for closedports to keep track of the closed port numbers was added.
+//The protscanner function also got cahanged to have two int for the return and to have a variable pass through.
+//The closed ports also got tracked going through the channel and then printed out.
 
 package scanner
 
@@ -37,7 +42,7 @@ func worker(ports, results chan int) {
 func PortScanner(num int) (int, int) {  
 //TODO 3 : ADD closed ports; currently code only tracks open ports
 var openports []int  // notice the capitalization here. access limited!
-var closeports []int
+var closeports []int //make slice for closeports number
 // TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
 	ports := make(chan int, num)    // found that 1024 (80.114s) is faster than 500 (240.252s) 700 (160.181s) 300(320.257s)
 	results := make(chan int)

@@ -30,11 +30,10 @@ func TestTotalPortsScanned(t *testing.T){
 
 func TestClosePort(t *testing.T){
 
-    _, gotclose:= PortScanner(1024) // Currently function returns only number of open ports
-    want := 1023 // default value when passing in 1024 TO scanme; also only works because currently PortScanner only returns 
-	          //consider what would happen if you parameterize the portscanner address and ports to scan  
-				//changed the want to 1 so the test passes
+    _, gotclose:= PortScanner(1024) // Function returns number of closed ports
+    want := 1023  //changed the want to 1023 so the test passes 
+				//would need to change to 1022 if 80 port opened
     if gotclose != want {
-        t.Errorf("got %d, wanted %d", gotopen, want)
+        t.Errorf("got %d, wanted %d", gotclose, want)
     }
 }
