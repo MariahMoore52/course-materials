@@ -1,1 +1,7 @@
 You might need to do a "go mod init bhg-scanner" or "go mod tidy"
+For useage of the scanner.go and scanner_test.go files you need to have a value put in the tester or main file that specifies the port numer. 
+The first thing that was changed was changing to time to DialTimeout. With this we needed to import time.
+Then a slice for closedports to keep track of the closed port numbers was added.
+The portscanner function also got cahanged to have two int for the return and to have a variable pass through.
+The closed ports also got tracked going through the channel and then printed out.
+In the scanner_test.go I added a test to test if the number of closed ports was what we wanted.
