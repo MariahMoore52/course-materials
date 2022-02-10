@@ -34,12 +34,12 @@ func worker(ports, results chan int) {
 // med: easy + return  complex data structure(s?) (maps or slices) containing the ports.
 // hard: restructuring code - consider modification to class/object 
 // No matter what you do, modify scanner_test.go to align; note the single test currently fails
-func PortScanner() (int, int) {  
+func PortScanner(num int) (int, int) {  
 //TODO 3 : ADD closed ports; currently code only tracks open ports
 var openports []int  // notice the capitalization here. access limited!
 var closeports []int
 // TODO 4: TUNE THIS FOR CODEANYWHERE / LOCAL MACHINE
-	ports := make(chan int, 300)    // found that 1024 (80.114s) is faster than 500 (240.252s) 700 (160.181s) 300(320.257s)
+	ports := make(chan int, num)    // found that 1024 (80.114s) is faster than 500 (240.252s) 700 (160.181s) 300(320.257s)
 	results := make(chan int)
 
 	for i := 0; i < cap(ports); i++ {
@@ -47,12 +47,12 @@ var closeports []int
 	}
 
 	go func() {
-		for i := 1; i <= 1024; i++ {
+		for i := 1; i <= num; i++ {
 			ports <- i
 		}
 	}()
 
-	for i := 0; i < 1024; i++ {
+	for i := 0; i < num; i++ {
 		port := <-results
 		if port > 0 {
 			openports = append(openports, port)
