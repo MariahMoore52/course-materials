@@ -19,6 +19,7 @@ type Assignment struct {
 	Title string `json:"title`
 	Description string `json:"desc"`
 	Points int `json:"points"`
+	DueDate string `json:"duedate"`
 }
 
 var Assignments []Assignment
@@ -30,6 +31,7 @@ func InitAssignments(){
 	assignmnet.Title = "Lab 4 "
 	assignmnet.Description = "Some lab this guy made yesteday?"
 	assignmnet.Points = 20
+	assignmnet.DueDate = "3/11/2022";
 	Assignments = append(Assignments, assignmnet)
 }
 
@@ -106,7 +108,21 @@ func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
 	var response Response
 	response.Assignments = Assignments
 
+	params := mux.Vars(r)
 
+	w.Header().Set("Content-Type", "application/json")
+	var assignmnet Assignment
+	r.ParseForm()
+	for _, assignment := range Assignments {
+		if assignment.Id == params["id"]{
+			assignmnet.Id =  r.FormValue("id")
+			assignmnet.Title =  r.FormValue("title")
+			assignmnet.Description =  r.FormValue("desc")
+			assignmnet.Points, _ =  strconv.Atoi(r.FormValue("points"))
+			assignmnet.DueDate, _ = r.FormValue("duedate")
+			break
+		}
+	}
 
 }
 
@@ -121,6 +137,7 @@ func CreateAssignment(w http.ResponseWriter, r *http.Request) {
 		assignmnet.Title =  r.FormValue("title")
 		assignmnet.Description =  r.FormValue("desc")
 		assignmnet.Points, _ =  strconv.Atoi(r.FormValue("points"))
+		assignmnet.DueDate, _ = r.FormValue("duedate")
 		Assignments = append(Assignments, assignmnet)
 		w.WriteHeader(http.StatusCreated)
 	}
