@@ -19,7 +19,7 @@ type Assignment struct {
 	Title string `json:"title`
 	Description string `json:"desc"`
 	Points int `json:"points"`
-	DueDate string `json:"duedate"`
+	//DueDate string `json:"duedate"`
 }
 
 var Assignments []Assignment
@@ -31,7 +31,7 @@ func InitAssignments(){
 	assignmnet.Title = "Lab 4 "
 	assignmnet.Description = "Some lab this guy made yesteday?"
 	assignmnet.Points = 20
-	assignmnet.DueDate = "3/11/2022";
+	//assignmnet.DueDate = "3/11/2022";
 	Assignments = append(Assignments, assignmnet)
 }
 
@@ -64,13 +64,16 @@ func GetAssignments(w http.ResponseWriter, r *http.Request) {
 func GetAssignment(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Entering %s end point", r.URL.Path)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	
 	params := mux.Vars(r)
 
 	for _, assignment := range Assignments {
 		if assignment.Id == params["id"]{
 			json.NewEncoder(w).Encode(assignment)
+			w.WriteHeader(http.StatusOK)
 			break
+		}else{
+			w.WriteHeader(http.StatusNotFound)
 		}
 	}
 	//TODO : Provide a response if there is no such assignment
@@ -113,17 +116,24 @@ func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var assignmnet Assignment
 	r.ParseForm()
-	for _, assignment := range Assignments {
+	for index, assignment := range Assignments {
 		if assignment.Id == params["id"]{
+			Assignments = append(Assignments[:index], Assignments[index+1:]...)
 			assignmnet.Id =  r.FormValue("id")
 			assignmnet.Title =  r.FormValue("title")
 			assignmnet.Description =  r.FormValue("desc")
 			assignmnet.Points, _ =  strconv.Atoi(r.FormValue("points"))
-			assignmnet.DueDate, _ = r.FormValue("duedate")
+			//assignmnet.DueDate, _ = r.FormValue("duedate")
+			Assignments = append(Assignments, assignmnet)
+			w.WriteHeader(http.StatusCreated)
 			break
+		}else{
+			w.WriteHeader(http.StatusNotFound)
 		}
+		
+		
 	}
-
+	//w.Write(jsonResponse)
 }
 
 func CreateAssignment(w http.ResponseWriter, r *http.Request) {
@@ -133,11 +143,12 @@ func CreateAssignment(w http.ResponseWriter, r *http.Request) {
 	// Possible TODO: Better Error Checking!
 	// Possible TODO: Better Logging
 	if(r.FormValue("id") != ""){
+		
 		assignmnet.Id =  r.FormValue("id")
 		assignmnet.Title =  r.FormValue("title")
 		assignmnet.Description =  r.FormValue("desc")
 		assignmnet.Points, _ =  strconv.Atoi(r.FormValue("points"))
-		assignmnet.DueDate, _ = r.FormValue("duedate")
+		//assignmnet.DueDate, _ = r.FormValue("duedate")
 		Assignments = append(Assignments, assignmnet)
 		w.WriteHeader(http.StatusCreated)
 	}
