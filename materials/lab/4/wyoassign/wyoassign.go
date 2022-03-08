@@ -19,7 +19,7 @@ type Responses struct{
 
 type Assignment struct {
 	Id string `json:"id"`
-	Title string `json:"title`
+	Title string `json:"title"`
 	Description string `json:"desc"`
 	Points int `json:"points"`
 	//DueDate string `json:"duedate"`
@@ -191,7 +191,6 @@ func UpdateAssignment(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	w.Header().Set("Content-Type", "application/json")
 	var assignmnet Assignment
 	r.ParseForm()
 	for index, assignment := range Assignments {
@@ -222,7 +221,6 @@ func UpdateCourse(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	w.Header().Set("Content-Type", "application/json")
 	var cours Course
 	r.ParseForm()
 	for index, course := range Courses {
