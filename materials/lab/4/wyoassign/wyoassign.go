@@ -26,7 +26,7 @@ type Assignment struct {
 }
 type Course struct{
 	Id string `json:"id"`
-	Course string `json:"course` 
+	Course string `json:"course"` 
 	CourseNumber int `json:"coursenumber"`
 }
 
