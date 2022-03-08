@@ -221,6 +221,7 @@ func UpdateCourse(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
+	
 	var cours Course
 	r.ParseForm()
 	for index, course := range Courses {
