@@ -1,0 +1,102 @@
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 11:40:15 starting API server
+2022/03/10 11:40:15 creating routes
+2022/03/10 11:40:19 Entering /assignments end point
+2022/03/10 11:42:38 Entering /assignment/Mike1a end point
+2022/03/10 11:42:42 Entering /assignment/Mike1A end point
+2022/03/10 11:42:42 http: superfluous response.WriteHeader call from wyoassign/wyoassign.GetAssignment (wyoassign.go:109)
+2022/03/10 11:44:24 Entering /assignment/Will end point
+2022/03/10 11:44:24 http: superfluous response.WriteHeader call from wyoassign/wyoassign.GetAssignment (wyoassign.go:109)
+2022/03/10 11:44:30 Entering /assignments end point
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:01:59 starting API server
+2022/03/10 12:01:59 creating routes
+2022/03/10 12:02:19 Entering /assignments end point
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:02:54 starting API server
+2022/03/10 12:02:54 creating routes
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go mod tidy
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:03:51 starting API server
+2022/03/10 12:03:51 creating routes
+2022/03/10 12:08:21 Entering /assignment/Mike1A end point
+2022/03/10 12:08:21 http: superfluous response.WriteHeader call from wyoassign/wyoassign.GetAssignment (wyoassign.go:109)
+2022/03/10 12:08:45 Entering /assignment/Mike1A DELETE end point
+2022/03/10 12:08:55 Entering /assignments end point
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:15:49 starting API server
+2022/03/10 12:15:49 creating routes
+2022/03/10 12:16:01 Entering /assignments/Mike1A end point
+2022/03/10 12:16:15 Entering /assignments end point
+2022/03/10 12:17:01 Entering /assignments/Mike1A end point
+2022/03/10 12:23:07 Entering /assignments/Mike1A end point
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:23:21 starting API server
+2022/03/10 12:23:21 creating routes
+2022/03/10 12:23:30 Entering /assignments/Mike1A end point
+2022/03/10 12:23:37 Entering /assignments end point
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:23:56 starting API server
+2022/03/10 12:23:56 creating routes
+2022/03/10 12:24:00 Entering /assignments end point
+2022/03/10 12:24:11 Entering /assignments/Mike1A end point
+2022/03/10 12:24:17 Entering /assignments end point
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:24:36 starting API server
+2022/03/10 12:24:36 creating routes
+2022/03/10 12:25:05 Entering /assignments end point
+2022/03/10 12:25:56 Entering /assignments/Mike1A end point
+2022/03/10 12:26:07 Entering /assignments end point
+2022/03/10 12:26:51 Entering /assignments/Mike1A end point
+2022/03/10 12:27:05 Entering /assignments end point
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main
+2022/03/10 12:31:16 starting API server
+2022/03/10 12:31:16 creating routes
+^C
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ go build main.go
+cabox@go:~/workspace/course-materials/materials/lab/4/main$ ./main >> output.txt
+2022/03/10 12:31:35 starting API server
+2022/03/10 12:31:35 creating routes
+2022/03/10 12:31:44 Entering /assignments end point
+2022/03/10 12:31:52 Entering /assignment/Mike1A end point
+2022/03/10 12:31:52 http: superfluous response.WriteHeader call from wyoassign/wyoassign.GetAssignment (wyoassign.go:109)
+2022/03/10 12:32:43 Entering /assignments end point
+2022/03/10 12:32:50 Entering /assignment/mar end point
+2022/03/10 12:32:50 http: superfluous response.WriteHeader call from wyoassign/wyoassign.GetAssignment (wyoassign.go:109)
+2022/03/10 12:33:31 Entering /assignments/mar end point
+2022/03/10 12:33:31 http: superfluous response.WriteHeader call from wyoassign/wyoassign.UpdateAssignment (wyoassign.go:205)
+2022/03/10 12:33:55 Entering /assignments end point
+2022/03/10 12:34:23 Entering /assignment/Mike1A DELETE end point
+2022/03/10 12:34:32 Entering /assignments end point
+2022/03/10 12:34:40 Entering /courses end point
+2022/03/10 12:34:51 Entering /course/Tuesday end point
+2022/03/10 12:35:01 Entering /courses end point
+2022/03/10 12:35:14 Entering /course/Tuesday end point
+2022/03/10 12:36:04 Entering /courses end point
+2022/03/10 12:36:11 Entering /course/Monday end point
+2022/03/10 12:36:11 http: superfluous response.WriteHeader call from wyoassign/wyoassign.GetCourse (wyoassign.go:128)
+2022/03/10 12:36:18 Entering /course/Tuesday end point
+2022/03/10 12:36:18 http: superfluous response.WriteHeader call from wyoassign/wyoassign.GetCourse (wyoassign.go:131)
+2022/03/10 12:36:31 Entering /course/Tuesday DELETE end point
+2022/03/10 12:36:43 Entering /course/Monday DELETE end point
+2022/03/10 12:36:50 Entering /courses end point
+2022/03/10 12:37:35 Entering /courses/Tuesday end point
+2022/03/10 12:38:58 Entering /courses/Monday end point
+2022/03/10 12:38:58 http: superfluous response.WriteHeader call from wyoassign/wyoassign.UpdateCourse (wyoassign.go:234)
+2022/03/10 12:39:06 Entering /courses end point
