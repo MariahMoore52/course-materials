@@ -13,13 +13,17 @@ import (
 //TODO_1: When LOG_LEVEL = 0 DO NOT LOG anything
 //TODO_1: When LOG_LEVEL = 1 LOG API details only 
 //TODO_1: When LOG_LEVEL = 2 LOG API details and file matches (e.g., everything)
-
+var LOG_LEVEL=2;
 func main() {
+	if(LOG_LEVEL==2 ||LOG_LEVEL==1){
+		log.Println("starting API server")
 	
-	log.Println("starting API server")
+	}
 	//create a new router
 	router := mux.NewRouter()
-	log.Println("creating routes")
+	if(LOG_LEVEL==2){
+		log.Println("creating routes")
+	}
 	//specify endpoints
 	router.HandleFunc("/", scrape.MainPage).Methods("GET")
 
@@ -37,5 +41,5 @@ func main() {
 
 	//start and listen to requests
 	http.ListenAndServe(":8080", router)
-
+	
 }

@@ -12,6 +12,7 @@ import (
     "strconv"
 )
 
+var LOG_LEVEL=2;
 
 //==========================================================================\\
 
@@ -32,13 +33,22 @@ func walkFn(w http.ResponseWriter) filepath.WalkFunc {
 
                 //TODO_5: As it currently stands the same file can be added to the array more than once 
                 //TODO_5: Prevent this from happening by checking if the file AND location already exist as a single record
-                Files = append(Files, tfile)
+				for i :=0; i < len(Files); i++ {
+					if(Files[i].Filename!=tfile.Filename){
+						if(Files[i].Filename!=tfile.Location){
+							Files = append(Files, tfile)
+						}
+					}
 
+				}
+                
+				count:=0;
                 if w != nil && len(Files)>0 {
 
                     //TODO_6: The current key value is the LEN of Files (this terrible); 
                     //TODO_6: Create some variable to track how many files have been added
-                    w.Write([]byte(`"`+(strconv.FormatInt(int64(len(Files)), 10))+`":  `))
+					count++;
+                    w.Write([]byte(`"`+(strconv.FormatInt(int64(count), 10))+`":  `))
                     json.NewEncoder(w).Encode(tfile)
                     w.Write([]byte(`,`))
 
@@ -70,8 +80,9 @@ func walkFn2(w http.ResponseWriter, query string) filepath.WalkFunc {
 //==========================================================================\\
 
 func APISTATUS(w http.ResponseWriter, r *http.Request) {
-
+	//if(LOG_LEVEL==1 | LOG_LEVEL==2){
 	log.Printf("Entering %s end point", r.URL.Path)
+	//}
 	w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusOK)
     w.Write([]byte(`{ "status" : "API is up and running ",`))
