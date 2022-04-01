@@ -196,7 +196,7 @@ func IndexFiles(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
     location, locOK := r.URL.Query()["location"]
-    
+    regex, regexOK := r.URL.Query()["regex"]
     //TODO_10: Currently there is a huge risk with this code ... namely, we can search from the root /
     //TODO_10: Assume the location passed starts at /home/ (or in Windows pick some "safe?" location)
     //TODO_10: something like ...  rootDir string := "???"
@@ -221,9 +221,12 @@ func IndexFiles(w http.ResponseWriter, r *http.Request) {
     // Define the logic required here to call the new function walkFn2(w,regex[0])
     // Hint, you need to grab the regex parameter (see how it's done for location above...) 
     
-    // if regexOK
-    //   call filepath.Walk(location[0], walkFn2(w, `(i?)`+regex[0]))
-    // else run code to locate files matching stored regular expression
+    if regexOK{
+	call filepath.Walk(rootDir+location[0], walkFn2(w, regex[0]))
+	}else{
+		filepath.Walk(rootDir+location[0], walkFn(w))
+	}
+	 
     if err := filepath.Walk(rootDir+location[0], walkFn(w)); err != nil {
 		log.Panicln(err)
 	}
