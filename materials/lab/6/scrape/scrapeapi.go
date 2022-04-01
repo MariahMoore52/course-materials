@@ -36,17 +36,22 @@ func walkFn(w http.ResponseWriter) filepath.WalkFunc {
 				
                 //TODO_5: As it currently stands the same file can be added to the array more than once 
                 //TODO_5: Prevent this from happening by checking if the file AND location already exist as a single record
+				if len(Files)==0{
+					Files = append(Files, tfile)
+					count++;
+				}else{
 				for i :=0; i < len(Files); i++ {
 					if(Files[i].Filename!=tfile.Filename){
-						if(Files[i].Filename!=tfile.Location){
-							
+						if(Files[i].Location!=tfile.Location){
+							Files = append(Files, tfile)
+							count++;
 						}
 					}
 
 				}
+			}
                 
-				Files = append(Files, tfile)
-				count++;
+				
                 if w != nil && len(Files)>0 {
 
                     //TODO_6: The current key value is the LEN of Files (this terrible); 
