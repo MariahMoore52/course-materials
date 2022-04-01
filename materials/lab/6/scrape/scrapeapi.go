@@ -10,6 +10,8 @@ import (
     "os"
     "path/filepath"
     "strconv"
+	"github.com/gorilla/mux"
+	"regexp"
 )
 
 var LOG_LEVEL=2;
@@ -74,40 +76,42 @@ func walkFn(w http.ResponseWriter) filepath.WalkFunc {
 
 func walkFn2(w http.ResponseWriter, query string) filepath.WalkFunc {
     return func(path string, f os.FileInfo, err error) error {
-       /* if r.MatchString(path) {
-			var tfile FileInfo
-			dir, filename := filepath.Split(path)
-			tfile.Filename = string(filename)
-			tfile.Location = string(dir)
-
-			
-			//TODO_5: As it currently stands the same file can be added to the array more than once 
-			//TODO_5: Prevent this from happening by checking if the file AND location already exist as a single record
-			for i :=0; i < len(Files); i++ {
-				if(Files[i].Filename!=tfile.Filename){
-					if(Files[i].Filename!=tfile.Location){
-						
-					}
+		w.Header().Set("Content-Type", "application/json")
+		r := regexp.MustCompile(`(?i)`+query) 
+	 	if r.MatchString(path) {
+		var tfile FileInfo
+		dir, filename := filepath.Split(path)
+		tfile.Filename = string(filename)
+		tfile.Location = string(dir)
+		count:=0;
+		
+		//TODO_5: As it currently stands the same file can be added to the array more than once 
+		//TODO_5: Prevent this from happening by checking if the file AND location already exist as a single record
+		for i :=0; i < len(Files); i++ {
+			if(Files[i].Filename!=tfile.Filename){
+				if(Files[i].Filename!=tfile.Location){
+					
 				}
-
 			}
+
+		}
+		
+		Files = append(Files, tfile)
+					count++;
+		if w != nil && len(Files)>0 {
+
+			//TODO_6: The current key value is the LEN of Files (this terrible); 
+			//TODO_6: Create some variable to track how many files have been added
 			
-			Files = append(Files, tfile)
-						count++;
-			if w != nil && len(Files)>0 {
+			w.Write([]byte(`"`+(strconv.FormatInt(int64(count), 10))+`":  `))
+			json.NewEncoder(w).Encode(tfile)
+			w.Write([]byte(`,`))
 
-				//TODO_6: The current key value is the LEN of Files (this terrible); 
-				//TODO_6: Create some variable to track how many files have been added
-				
-				w.Write([]byte(`"`+(strconv.FormatInt(int64(count), 10))+`":  `))
-				json.NewEncoder(w).Encode(tfile)
-				w.Write([]byte(`,`))
+		} 
+		
+		log.Printf("[+] HIT: %s\n", path)
 
-			} 
-			
-			log.Printf("[+] HIT: %s\n", path)
-
-		}*/
+	}
 		return nil
 	}
 	
@@ -259,6 +263,5 @@ func AddReg(w http.ResponseWriter, r *http.Request) {
     log.Printf("Entering %s end point", r.URL.Path)
     w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
-	params["regex"]
-	addRegEx()
+	addRegEx(`(?i)`+params["regex"])
 }
