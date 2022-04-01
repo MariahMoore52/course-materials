@@ -23,7 +23,7 @@ var LOG_LEVEL=2;
 func walkFn(w http.ResponseWriter) filepath.WalkFunc {
     return func(path string, f os.FileInfo, err error) error {
         w.Header().Set("Content-Type", "application/json")
-
+		count:=0;
         for _, r := range regexes {
             if r.MatchString(path) {
                 var tfile FileInfo
@@ -31,23 +31,25 @@ func walkFn(w http.ResponseWriter) filepath.WalkFunc {
                 tfile.Filename = string(filename)
                 tfile.Location = string(dir)
 
+				
                 //TODO_5: As it currently stands the same file can be added to the array more than once 
                 //TODO_5: Prevent this from happening by checking if the file AND location already exist as a single record
 				for i :=0; i < len(Files); i++ {
 					if(Files[i].Filename!=tfile.Filename){
 						if(Files[i].Filename!=tfile.Location){
-							Files = append(Files, tfile)
+							
 						}
 					}
 
 				}
                 
-				count:=0;
+				Files = append(Files, tfile)
+							count++;
                 if w != nil && len(Files)>0 {
 
                     //TODO_6: The current key value is the LEN of Files (this terrible); 
                     //TODO_6: Create some variable to track how many files have been added
-					count++;
+					
                     w.Write([]byte(`"`+(strconv.FormatInt(int64(count), 10))+`":  `))
                     json.NewEncoder(w).Encode(tfile)
                     w.Write([]byte(`,`))
@@ -72,10 +74,47 @@ func walkFn(w http.ResponseWriter) filepath.WalkFunc {
 
 func walkFn2(w http.ResponseWriter, query string) filepath.WalkFunc {
     return func(path string, f os.FileInfo, err error) error {
-        return nil
+       /* if r.MatchString(path) {
+			var tfile FileInfo
+			dir, filename := filepath.Split(path)
+			tfile.Filename = string(filename)
+			tfile.Location = string(dir)
 
-    }
+			
+			//TODO_5: As it currently stands the same file can be added to the array more than once 
+			//TODO_5: Prevent this from happening by checking if the file AND location already exist as a single record
+			for i :=0; i < len(Files); i++ {
+				if(Files[i].Filename!=tfile.Filename){
+					if(Files[i].Filename!=tfile.Location){
+						
+					}
+				}
+
+			}
+			
+			Files = append(Files, tfile)
+						count++;
+			if w != nil && len(Files)>0 {
+
+				//TODO_6: The current key value is the LEN of Files (this terrible); 
+				//TODO_6: Create some variable to track how many files have been added
+				
+				w.Write([]byte(`"`+(strconv.FormatInt(int64(count), 10))+`":  `))
+				json.NewEncoder(w).Encode(tfile)
+				w.Write([]byte(`,`))
+
+			} 
+			
+			log.Printf("[+] HIT: %s\n", path)
+
+		}*/
+		return nil
+	}
+	
 }
+
+    
+
 
 //==========================================================================\\
 
@@ -108,6 +147,15 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
     //TODO_8 - Write out something better than this that describes what this api does
 
 	fmt.Fprintf(w, "<html><body><H1>Welcome to my awesome File page</H1></body>")
+	fmt.Fprintf(w, "<html><body><H1>Can Do:</H1></body>")
+	fmt.Fprintf(w, "<html><body><H1>/</H1></body>")
+	fmt.Fprintf(w, "<html><body></api-status</H1></body>")
+	fmt.Fprintf(w, "<html><body><H1>/indexer</H1></body>")
+	fmt.Fprintf(w, "<html><body><H1>/search</H1></body>")
+	fmt.Fprintf(w, "<html><body><H1>/addsearch/{regex}</H1></body>")
+	fmt.Fprintf(w, "<html><body><H1>/clear</H1></body>")
+	fmt.Fprintf(w, "<html><body><H1>/reset</H1></body>")
+
 }
 
 
@@ -121,15 +169,17 @@ func FindFile(w http.ResponseWriter, r *http.Request) {
 
         // ADVANCED: Create a function in scrape.go that returns a list of file locations; call and use the result here
         // e.g., func finder(query string) []string { ... }
-
+		found:=false
         for _, File := range Files {
 		    if File.Filename == q[0] {
                 json.NewEncoder(w).Encode(File.Location)
-                //consider FOUND = TRUE
+                found=true
 		    }
         }
         //TODO_9: Handle when no matches exist; print a useful json response to the user; hint you might need a "FOUND variable" to check here ...
-
+		if(found==false){
+			fmt.Fprintf(w, "<html><body><H1>File not found</H1></body>")
+		}
     } else {
         // didn't pass in a search term, show all that you've found
         w.Write([]byte(`"files":`))    
@@ -147,7 +197,7 @@ func IndexFiles(w http.ResponseWriter, r *http.Request) {
     //TODO_10: Assume the location passed starts at /home/ (or in Windows pick some "safe?" location)
     //TODO_10: something like ...  rootDir string := "???"
     //TODO_10: create another variable and append location[0] to rootDir (where appropriate) to patch this hole
-
+	rootDir := "/home/cabox"
     if locOK && len(location[0]) > 0 {
         w.WriteHeader(http.StatusOK)
 
@@ -170,7 +220,7 @@ func IndexFiles(w http.ResponseWriter, r *http.Request) {
     // if regexOK
     //   call filepath.Walk(location[0], walkFn2(w, `(i?)`+regex[0]))
     // else run code to locate files matching stored regular expression
-    if err := filepath.Walk(location[0], walkFn(w)); err != nil {
+    if err := filepath.Walk(rootDir+location[0], walkFn(w)); err != nil {
 		log.Panicln(err)
 	}
 
@@ -182,11 +232,21 @@ func IndexFiles(w http.ResponseWriter, r *http.Request) {
 
 //TODO_12 create endpoint that calls resetRegEx AND *** clears the current Files found; ***
 //TODO_12 Make sure to connect the name of your function back to the reset endpoint main.go!
+func ResetArray(w http.ResponseWriter, r *http.Request) {
+    log.Printf("Entering %s end point", r.URL.Path)
+    w.Header().Set("Content-Type", "application/json")
+	resetRegEx()
+	Files=nil
+}
 
 
 //TODO_13 create endpoint that calls clearRegEx ; 
 //TODO_12 Make sure to connect the name of your function back to the clear endpoint main.go!
-
+func ClearFiles(w http.ResponseWriter, r *http.Request) {
+    log.Printf("Entering %s end point", r.URL.Path)
+    w.Header().Set("Content-Type", "application/json")
+	clearRegEx()
+}
 
 //TODO_14 create endpoint that calls addRegEx ; 
 //TODO_12 Make sure to connect the name of your function back to the addsearch endpoint in main.go!
@@ -195,3 +255,10 @@ func IndexFiles(w http.ResponseWriter, r *http.Request) {
 // params["regex"] should contain your string that you pass to addRegEx
 // If you try to pass in (?i) on the command line you'll likely encounter issues
 // Suggestion : prepend (?i) to the search query in this endpoint
+func AddReg(w http.ResponseWriter, r *http.Request) {
+    log.Printf("Entering %s end point", r.URL.Path)
+    w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	params["regex"]
+	addRegEx()
+}
