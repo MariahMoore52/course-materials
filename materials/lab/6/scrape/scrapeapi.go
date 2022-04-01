@@ -46,7 +46,7 @@ func walkFn(w http.ResponseWriter) filepath.WalkFunc {
 				}
                 
 				Files = append(Files, tfile)
-							count++;
+				count++;
                 if w != nil && len(Files)>0 {
 
                     //TODO_6: The current key value is the LEN of Files (this terrible); 
@@ -222,7 +222,7 @@ func IndexFiles(w http.ResponseWriter, r *http.Request) {
     // Hint, you need to grab the regex parameter (see how it's done for location above...) 
     
     if regexOK{
-	call filepath.Walk(rootDir+location[0], walkFn2(w, regex[0]))
+		filepath.Walk(rootDir+location[0], walkFn2(w, regex[0]))
 	}else{
 		filepath.Walk(rootDir+location[0], walkFn(w))
 	}
