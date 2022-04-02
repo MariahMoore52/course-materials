@@ -25,7 +25,7 @@ var LOG_LEVEL=2;
 func walkFn(w http.ResponseWriter) filepath.WalkFunc {
     return func(path string, f os.FileInfo, err error) error {
         w.Header().Set("Content-Type", "application/json")
-		count:=0;
+		count:=0
         for _, r := range regexes {
             if r.MatchString(path) {
                 var tfile FileInfo
@@ -38,13 +38,14 @@ func walkFn(w http.ResponseWriter) filepath.WalkFunc {
                 //TODO_5: Prevent this from happening by checking if the file AND location already exist as a single record
 				if len(Files)==0{
 					Files = append(Files, tfile)
-					count++;
+					//count++
 				}else{
+
 				for i :=0; i < len(Files); i++ {
 					if(Files[i].Filename!=tfile.Filename){
 						if(Files[i].Location!=tfile.Location){
 							Files = append(Files, tfile)
-							count++;
+							count++
 						}
 					}
 
