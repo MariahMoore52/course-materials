@@ -15,7 +15,7 @@ import (
 var shalookup map[string]string
 var md5lookup map[string]string
 
-func GuessSingle(sourceHash string, filename string) {
+func GuessSingle(sourceHash string, filename string) string{
 
 	f, err := os.Open(filename)
 	if err != nil {
@@ -34,17 +34,20 @@ func GuessSingle(sourceHash string, filename string) {
 		hash := fmt.Sprintf("%x", md5.Sum([]byte(password)))
 		if hash == sourceHash {
 			fmt.Printf("[+] Password found (MD5): %s\n", password)
+			return password
 		}
 
 		hash = fmt.Sprintf("%x", sha256.Sum256([]byte(password)))
 		if hash == sourceHash {
 			fmt.Printf("[+] Password found (SHA-256): %s\n", password)
+			return password
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Fatalln(err)
 	}
+	return ""
 }
 
 func GenHashMaps(filename string) {
@@ -75,5 +78,13 @@ func GetSHA(hash string) (string, error) {
 
 //TODO
 func GetMD5(hash string) (string, error) {
-	return "", errors.New("not implemented")
+	password, ok := md5lookup[hash]
+	if ok {
+		return password, nil
+
+	} else {
+
+		return "", errors.New("password does not exist")
+
+	}
 }
