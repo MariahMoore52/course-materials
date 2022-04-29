@@ -11,5 +11,11 @@ Due April 9th at 11:59PM
 
 ## Submit 
 1. Link to your Github Repository [16pts]
+https://github.com/MariahMoore52/course-materials/tree/main/materials
 2. Report the numbers [2pts]
+with wordlist test .003s
+4/.003ss
+with rockyou-70.txt test .153s
+42660/.153s
 2. List of Collaborator
+William Frost
