@@ -15,7 +15,7 @@ import (
 var shalookup map[string]string
 var md5lookup map[string]string
 
-func GuessSingle(sourceHash string, filename string) string{
+func GuessSingle(sourceHash string, filename string) {
 
 	f, err := os.Open(filename)
 	if err != nil {
@@ -31,23 +31,24 @@ func GuessSingle(sourceHash string, filename string) string{
 		// TODO - From the length of the hash you should know which one of these to check ...
 		// add a check and logicial structure
 
-		hash := fmt.Sprintf("%x", md5.Sum([]byte(password)))
-		if hash == sourceHash {
+		
+		if len(sourceHash) <= 32 {
+			//hash := fmt.Sprintf("%x", md5.Sum([]byte(password)))
 			fmt.Printf("[+] Password found (MD5): %s\n", password)
-			return password
-		}
-
-		hash = fmt.Sprintf("%x", sha256.Sum256([]byte(password)))
-		if hash == sourceHash {
+			
+		}else if len(sourceHash) > 32 {
+			//hash = fmt.Sprintf("%x", sha256.Sum256([]byte(password)))
 			fmt.Printf("[+] Password found (SHA-256): %s\n", password)
-			return password
+			
 		}
+		
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Fatalln(err)
+		
 	}
-	return ""
+	
 }
 
 func GenHashMaps(filename string) {
@@ -57,6 +58,38 @@ func GenHashMaps(filename string) {
 	//rather than check for equality add each hash:passwd entry to a map SHA and MD5 where the key = hash and the value = password
 	//TODO at the very least use go subroutines to generate the sha and md5 hashes at the same time
 	//OPTIONAL -- Can you use workers to make this even faster
+
+	f, err := os.Open(filename)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	md5lookup := make(map[string]string)
+	shalookup := make(map[string]string)
+	for scanner.Scan() {
+		password := scanner.Text()
+
+		// TODO - From the length of the hash you should know which one of these to check ...
+		// add a check and logicial structure
+
+		
+		
+			hash := fmt.Sprintf("%x", md5.Sum([]byte(password)))
+			//fmt.Sprintf("%x", md5.Sum([]byte(password)))
+			md5lookup[hash]=password
+			
+		
+			hash = fmt.Sprintf("%x", sha256.Sum256([]byte(password)))
+			//fmt.Sprintf("%x", sha256.Sum256([]byte(password)))
+			shalookup[hash]=password
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatalln(err)
+		
+	}
 
 	//TODO create a test in hscan_test.go so that you can time the performance of your implementation
 	//Test and record the time it takes to scan to generate these Maps
